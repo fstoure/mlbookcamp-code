@@ -3,7 +3,6 @@ import numpy as np
 
 from flask import Flask, request, jsonify
 
-
 def predict_single(customer, dv, model):
     X = dv.transform([customer])
     y_pred = model.predict_proba(X)[:, 1]
@@ -17,22 +16,19 @@ with open('churn-model.bin', 'rb') as f_in:
 app = Flask('churn')
 
 
-@app.route('/predict', methods=['GET', 'POST'])
-def predict_api():
-    if request.method == 'POST':
-        customer = request.get_json()
+@app.route('/predict', methods=['POST'])
+def predict():
+    customer = request.get_json()
 
-        prediction = predict_single(customer, dv, model)
-        churn = prediction >= 0.5
+    prediction = predict_single(customer, dv, model)
+    churn = prediction >= 0.5
+    
+    result = {
+        'churn_probability': float(prediction),
+        'churn': bool(churn),
+    }
 
-        result = {
-            'churn_probability': float(prediction),
-            'churn': bool(churn),
-        }
-
-        return jsonify(result)
-    else:
-        return 'Please use POST method to get prediction.'
+    return jsonify(result)
 
 @app.route('/')
 def index():

@@ -1,6 +1,9 @@
 import pickle
 import numpy as np
 
+# Ce code est sensé marché lorsqu'il est lancé sur le terminal comme suit :
+# python churn_serivng_simple.py
+
 
 def predict_single(customer, dv, model):
     X = dv.transform([customer])
