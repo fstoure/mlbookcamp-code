@@ -16,6 +16,10 @@ with open('churn-model.bin', 'rb') as f_in:
 
 app = Flask('churn')
 
+@app.route('/')
+def index():
+    return 'Welcome to the Churn Prediction API'
+
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict_api():
@@ -33,10 +37,6 @@ def predict_api():
         return jsonify(result)
     else:
         return 'Please use POST method to get prediction.'
-
-@app.route('/')
-def index():
-    return 'Welcome to the Churn Prediction API'
 
 
 if __name__ == '__main__':
